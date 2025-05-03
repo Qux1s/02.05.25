@@ -1,0 +1,119 @@
+#include <iostream>
+#include <string>
+#include <array>
+#include <limits>
+
+struct AdvertisingRevenue
+{
+	int numberOfAdvertisements{ };
+
+	double percentOfResponse{ };
+
+	double paymentOfResponse{ };
+};
+
+enum class ComponentsAdvertisingRevenue
+{
+	number_of_advertisements,
+	percent_of_response,
+	payment_of_response,
+	COUNT
+};
+
+constexpr std::array<std::string_view, static_cast<size_t>(ComponentsAdvertisingRevenue::COUNT)> advertisingComponentNames{
+	"number of advertisements",
+	"percent of responce(in the form of a fraction from 0 to 1)",
+	"payment of response"
+};
+
+
+
+void ignoreLine();
+bool isContinue();
+void printResult();
+double calculateAdvertisingIncome(const AdvertisingRevenue& adv);
+void ignoreLine();
+
+template <typename T>
+T userInput(std::string_view prompt, T min = std::numeric_limits<T>::lowest(), T max = std::numeric_limits<T>::max())
+{
+	while (true)
+	{
+		std::cout << "Enter a " << prompt << ": "; //Что такое подсказка в программировании?В языках программирования подсказка обычно относится к сообщению или тексту, отображаемому пользователю для запроса ввода или предоставления инструкций.
+
+
+		T value{ };
+
+		std::cin >> value;
+
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			ignoreLine();
+			std::cout << "Oops, that input is invalid. Please try again.\n";
+			continue;
+		}
+
+		if (value<min || value>max)
+		{
+			std::cout << "Value must be between" << min << " and " << max << ". Please try again.\n";
+			continue;
+		}
+
+		return value;
+	}
+}
+
+int main()
+{
+	printResult();
+
+	return 0;
+}
+
+void printResult()
+{
+	do
+	{
+		AdvertisingRevenue VladislavGromakov{
+			userInput<int>(advertisingComponentNames[static_cast<size_t>(ComponentsAdvertisingRevenue::number_of_advertisements)], 0),
+			userInput<double>(advertisingComponentNames[static_cast<size_t>(ComponentsAdvertisingRevenue::percent_of_response)], 0.0, 1.0),
+			userInput<double>(advertisingComponentNames[static_cast<size_t>(ComponentsAdvertisingRevenue::payment_of_response)], 0.0)
+		};
+
+		std::cout << "Your number of advertisements: " << VladislavGromakov.numberOfAdvertisements << '\n';
+		std::cout << "Your percent of response: " << VladislavGromakov.percentOfResponse << '\n';
+		std::cout << "Your payment of response: " << VladislavGromakov.paymentOfResponse << '\n';
+
+		std::cout << "The amount of your income from advertising is: " << calculateAdvertisingIncome(VladislavGromakov) << "\n\n";
+
+	} while (isContinue());
+}
+
+double calculateAdvertisingIncome(const AdvertisingRevenue& adv)
+{
+	return adv.numberOfAdvertisements * adv.percentOfResponse * adv.paymentOfResponse;
+}
+
+void ignoreLine()
+{
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+bool isContinue()
+{
+	while (true)
+	{
+		std::cout << "Enter 'y' to continue or 'n' to stop: ";
+		char userResult{};
+		std::cin >> userResult;
+		ignoreLine();
+
+		if (userResult == 'y' || userResult == 'Y')
+			return true;
+		else if (userResult == 'n' || userResult == 'N')
+			return false;
+		else
+			std::cout << "Invalid input! Please enter 'y' or 'n'.\n";
+	}
+}
