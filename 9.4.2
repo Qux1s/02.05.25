@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+#include <array>
+#include <limits>
+
+struct fraction
+{
+	int numerator{};
+	int denominator{};
+
+};
+
+enum class InputPosition
+{
+	first_numerator,
+	first_denominator,
+	second_numerator,
+	second_denominator,
+	COUNT         
+};
+
+constexpr std::array<std::string_view, static_cast<size_t>(InputPosition::COUNT)> inputPosition{
+	"first numerator",
+	"first denominator",
+	"second numerator",
+	"second denominator"
+};
+
+
+
+int userInputNumber(InputPosition numberPosition);
+void ignoreLine();
+void inputError();
+std::string_view printPositionNumber(InputPosition position);
+bool isContinue();
+void printResult(fraction firstFraction, fraction secondFraction);
+
+int main()
+{
+	fraction firstFraction;
+
+	fraction secondFraction;
+
+	printResult(firstFraction, secondFraction);
+
+	return 0;
+}
+
+int userInputNumber(InputPosition numberPosition)
+
+{
+
+	while (true)
+	{
+		std::cout << "Enter a " << printPositionNumber(numberPosition) << " value : ";
+
+		int userFirst{};
+
+		std::cin >> userFirst;
+
+
+		if (std::cin.fail())
+		{
+			inputError();
+
+			continue;
+		}
+
+		return userFirst;
+	}
+
+}
+
+void ignoreLine()
+{
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+std::string_view printPositionNumber(InputPosition position)
+{
+	return inputPosition[static_cast<size_t>(position)];
+}
+
+bool isContinue()
+{
+	while (true)
+	{
+		std::cout << "Enter 'y' to continue or 'n' to stop: ";
+
+		char userResult{};
+
+		std::cin >> userResult;
+
+		ignoreLine();
+
+		if (userResult == 'y' || userResult == 'Y')
+			return true;
+		else if (userResult == 'n' || userResult == 'N')
+			return false;
+		else
+			std::cout << "Invalid input! Please enter 'y' or 'n'.\n";
+	}
+}
+
+void inputError()
+{
+	std::cin.clear();
+
+	ignoreLine();
+
+	std::cout << "Oops, that input is invalid.  Please try again.\n";
+}
+
+void printResult(fraction firstFraction, fraction secondFraction)
+{
+	do
+	{
+	firstFraction.numerator = { userInputNumber(InputPosition::first_numerator) };
+	firstFraction.denominator = { userInputNumber(InputPosition::first_denominator) };
+	secondFraction.numerator = { userInputNumber(InputPosition::second_numerator) };
+	secondFraction.denominator = { userInputNumber(InputPosition::second_denominator) };
+
+	std::cout << firstFraction.numerator << "/" << firstFraction.denominator << " * " << secondFraction.numerator << "/" << secondFraction.denominator << " is " <<
+		(static_cast<double>(firstFraction.numerator) / firstFraction.denominator) * (static_cast<double>(secondFraction.numerator) / secondFraction.denominator) << '\n';
+
+	} while (isContinue());
+}
