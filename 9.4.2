@@ -16,7 +16,7 @@ enum class InputPosition
 	first_denominator,
 	second_numerator,
 	second_denominator,
-	COUNT         
+	COUNT
 };
 
 constexpr std::array<std::string_view, static_cast<size_t>(InputPosition::COUNT)> inputPosition{
@@ -115,13 +115,23 @@ void printResult(fraction firstFraction, fraction secondFraction)
 {
 	do
 	{
-	firstFraction.numerator = { userInputNumber(InputPosition::first_numerator) };
-	firstFraction.denominator = { userInputNumber(InputPosition::first_denominator) };
-	secondFraction.numerator = { userInputNumber(InputPosition::second_numerator) };
-	secondFraction.denominator = { userInputNumber(InputPosition::second_denominator) };
+	tryAgain:
+		firstFraction.numerator = { userInputNumber(InputPosition::first_numerator) };
+		firstFraction.denominator = { userInputNumber(InputPosition::first_denominator) };
+		secondFraction.numerator = { userInputNumber(InputPosition::second_numerator) };
+		secondFraction.denominator = { userInputNumber(InputPosition::second_denominator) };
 
-	std::cout << firstFraction.numerator << "/" << firstFraction.denominator << " * " << secondFraction.numerator << "/" << secondFraction.denominator << " is " <<
-		(static_cast<double>(firstFraction.numerator) / firstFraction.denominator) * (static_cast<double>(secondFraction.numerator) / secondFraction.denominator) << '\n';
+		if (firstFraction.denominator == 0 || secondFraction.denominator == 0)
+		{
+			std::cout << "Denominator cannot be 0. Please enter again:\n ";
+
+			goto tryAgain;
+		}
+
+		std::cout << firstFraction.numerator << "/" << firstFraction.denominator << " * "
+			<< secondFraction.numerator << "/" << secondFraction.denominator << " is " <<
+			(static_cast<double>(firstFraction.numerator) / firstFraction.denominator) *
+			(static_cast<double>(secondFraction.numerator) / secondFraction.denominator) << '\n';
 
 	} while (isContinue());
 }
