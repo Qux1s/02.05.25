@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+#include <array>
+#include <limits>
+
+enum MonsterType
+{
+	Ogre,
+	Dragon,
+	Orс,
+	Big_spider,
+	Slime
+};
+
+struct Monster
+{
+	std::string name { };
+	int health { };
+};
+
+void printMonster(Monster d, MonsterType type);
+std::string_view printTypeMonster(MonsterType type);
+
+int main()
+{
+	Monster ogre { "Torn", 145};
+
+	Monster slime{ "Blurp", 23};
+
+	printMonster(ogre, Ogre);
+
+	printMonster(slime, Slime);
+
+	return 0;
+}
+
+void printMonster(Monster d, MonsterType type)
+{
+	std::cout << "This " << printTypeMonster(type) << " is named " << d.name << " and has " << d.health << " health.\n";
+}
+
+std::string_view printTypeMonster(MonsterType type)
+{
+	switch (type)
+	{
+	case Ogre: return "Ogre";
+	case Dragon: return "Dragon";
+	case Orс: return "Orс";
+	case Big_spider: return "Big spider";
+	case Slime: return "Slime";
+	default: return "Unknown";
+	}
+}
